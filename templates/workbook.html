@@ -21,6 +21,22 @@
         .sheet-container.active {
             display: block;
         }
+        .bold-column {
+            font-weight: bold;
+        }
+        .title-cell {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .pivot-table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .pivot-table th,
+        .pivot-table td {
+            border: 1px solid black;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -32,14 +48,16 @@
     <br><br>
     {% for sheet_name in sheet_names %}
         <div id="{{ sheet_name }}" class="sheet-container">
-            <table>
+            <table class="pivot-table">
                 {% for row in workbook[sheet_name].iter_rows(values_only=True) %}
                     <tr>
                         {% for cell in row %}
                             {% if cell is none %}
                                 <td>  </td>
-                                {% else %}
-                                     <td>{{ cell }}</td>
+                            {% elif loop.index == 1 %}
+                                <td class="bold-column">{{ cell }}</td>
+                            {% else %}
+                                <td>{{ cell }}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
