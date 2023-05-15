@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Workbook Display</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Function to handle the search functionality
+        $(document).ready(function() {
+            $('#search-input').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('.tab-button').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    <style>
+        .sheet-container {
+            display: none;
+        }
+        .sheet-container.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="search-input" placeholder="Search for a sheet...">
+    <br><br>
+    {% for sheet_name in sheet_names %}
+        <button class="tab-button" onclick="showSheet('{{ sheet_name }}')">{{ sheet_name }}</button>
+    {% endfor %}
+    <br><br>
+    {% for sheet_name in sheet_names %}
+        <div id="{{ sheet_name }}" class="sheet-container">
+            <table>
+                {% for row in workbook[sheet_name].iter_rows(values_only=True) %}
+                    <tr>
+                        {% for cell in row %}
+                            {% if cell is none %}
+                                <td>  </td>
+                                {% else %}
+                                     <td>{{ cell }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <img src="/Users/anijahphillip/Desktop/ReportApp/static/PieCharts/{{ sheet_name }}_pie_chart.png" alt="Pie Chart">
+        </div>
+    {% endfor %}
+
+    <script>
+        // Function to show the selected sheet
+        function showSheet(sheetName) {
+            $('.tab-button').removeClass('active');
+            $('.sheet-container').removeClass('active');
+            $('#' + sheetName).addClass('active');
+            $('#' + sheetName).siblings('.tab-button').addClass('active');
+        }
+    </script>
+</body>
+</html>
