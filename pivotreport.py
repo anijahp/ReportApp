@@ -1,8 +1,13 @@
 import os
+import openpyxl
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.chart import PieChart3D, Reference
 from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl import load_workbook
+from openpyxl.drawing.image import Image
+from PIL import Image as PILImage
+import matplotlib.pyplot as plt
 
 # Load the raw data from Excel file into a pandas DataFrame
 df = pd.read_excel('/Users/anijahphillip/Downloads/reportdata.xlsx', skiprows=6)
@@ -37,7 +42,35 @@ for agency in agencies:
     pie_chart.set_categories(labels)
     pie_chart.title = f'{agency.upper()} % Rate'
     worksheet.add_chart(pie_chart, f"C{pivot_table.shape[0]+3}")
-    
+
+    # Convert the data and labels to Python lists
+    labels = pivot_table.index.tolist()
+    data = pivot_table.iloc[:, 0].tolist()
+
+
+    fig, ax = plt.subplots()
+    ax.pie(data, labels=labels, autopct='%1.1f%%')
+    ax.set_title(f'{agency.upper()} % Rate')
+
+    # Save the chart as an image
+    chart_filename = f"{agency.upper()}_pie_chart.png"
+    chart_filepath = os.path.join('/Users/anijahphillip/Desktop/ReportApp/static/PieCharts', chart_filename)
+    plt.savefig(chart_filepath)
+    plt.close()
+  
+    # for sheet_name in workbook.sheetnames:
+    #     sheet = workbook[agency]
+
+    # for chart in sheet._charts:
+    #     # Extract chart information or save it as an image
+    #     chart_filename = f"{agency.upper()}_pie_chart.png"
+    #     chart_filepath = os.path.join('/Users/anijahphillip/Desktop/PieCharts', chart_filename)
+    #     chart.save(chart_filepath)
+            
+                    # Save the chart as PNG
+
+
+        
 
 # Save the workbook to an Excel file
 output_file = '/Users/anijahphillip/Downloads/Security_Awarenessreport.xlsx'

@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 import os
 from openpyxl.styles import Font
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='/Users/anijahphillip/Desktop/ReportApp/static')
 
 @app.route('/')
 def display_workbook():
@@ -33,4 +33,4 @@ def display_workbook():
     return render_template('workbook.html', sheet_names=sheet_names, workbook=workbook)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=8080, debug=True)
