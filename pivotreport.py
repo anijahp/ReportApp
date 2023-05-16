@@ -8,6 +8,8 @@ from openpyxl import load_workbook
 from openpyxl.drawing.image import Image
 from PIL import Image as PILImage
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 # Load the raw data from Excel file into a pandas DataFrame
 df = pd.read_excel('/Users/anijahphillip/Downloads/reportdata.xlsx', skiprows=6)
@@ -44,8 +46,8 @@ for agency in agencies:
     worksheet.add_chart(pie_chart, f"C{pivot_table.shape[0]+3}")
 
     # Convert the data and labels to Python lists
-    labels = pivot_table.index.tolist()
-    data = pivot_table.iloc[:, 0].tolist()
+    labels = pivot_table.index[:-1].tolist()
+    data = pivot_table.iloc[:-1, 0].tolist()
 
 
     fig, ax = plt.subplots()
